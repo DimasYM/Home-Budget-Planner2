@@ -48,17 +48,18 @@
 
     <div class="main--content">
             
-            <form action="">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 
                 <!-- Elemen formulir untuk Nama Pasien -->
                 <div class="mb-3">
-                    <label for="nbulan_income" class="form-label">Month</label>
-                    <input type="text" class="form-control" id="bulan_income" name="bulan_income" required>
+                    <label for="tanggal">Date</label>
+                    <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+
                 </div>
     
                 <!-- Elemen formulir untuk alamat -->
                 <div class="mb-3">
-                    <label for="aincome" class="form-label">Income</label>
+                    <label for="income" class="form-label">Income</label>
                     <input type="text" class="form-control" id="income" name="income" required>
                 </div>
     
@@ -67,12 +68,45 @@
                     <label for="expenses" class="form-label">Expenses</label>
                     <input type="text" class="form-control" id="expenses" name="expenses" required>
                 </div>
-                
+
                 <!-- Tombol Submit -->
                 <div class="d-grid gap-2">
-                    <button class="btn btn-secondary" type="submit" name="submit">Insert</button>
+                    <button class="btn btn-secondary" type="submit" value="Submit">Insert</button>
                 </div>
             </form>
+        </div>
+        <?php
+        
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "homebudget_db";
+
+        // Membuat koneksi
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        
+        // Memeriksa koneksi
+        if ($conn->connect_error) {
+            die("Koneksi gagal: " . $conn->connect_error);
+        }
+        
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $tanggal = $_POST["tanggal"];
+            $income = $_POST["income"];
+            $expenses = $_POST["expenses"];
+
+        // Menambahkan data ke dalam database
+        $sql = "INSERT INTO incomelist (tanggal, income, expenses) VALUES ('$tanggal', '$income', '$expenses')";
+
+        if ($conn->query($sql) === TRUE) {
+            header("Location: incomelist.php");
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+
+        $conn->close();
+    }
+    ?>
         </div>
     
 </body>

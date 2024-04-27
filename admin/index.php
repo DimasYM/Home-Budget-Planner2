@@ -8,7 +8,25 @@
     <link rel="stylesheet" href="../style/indexstyle.css">
 </head>
 <body>
-    <div class="sidebar">
+            <?php 
+
+include "../config.php";
+
+// Memeriksa koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+    
+    $sql = "SELECT * FROM budgetlist, incomelist";
+    $result = mysqli_query($conn, $sql);
+    
+    // Mengecek apakah ada data yang ditemukan
+    if (mysqli_num_rows($result) > 0) {
+    }
+    while ($row = mysqli_fetch_assoc($result)) {
+    }
+}
+?>
+<div class="sidebar">
         <div class="logo"><img src="" alt=""></div>
             <ul class="menu">
                 <li class="active">
@@ -47,7 +65,6 @@
         <div class="main--content">
             <div class="header--wrapper">
                 <div class ="header--title">
-                    <span>Primary</span>
                     <h2>Dashboard</h2>
                 </div>
                 <div class="user--info">
@@ -69,7 +86,7 @@
                             </div>
                             <img src="../assets/budget.jpg" alt="" class="icon" /> 
                         </div>
-                        <span class="card-detail">*** *** ***</span>
+                        <span class="card-detail">Rp 000.000.000</span>
                     </div>
                     
                     <div class="data--card light-cream">
@@ -83,7 +100,7 @@
                                 </div>
                                 <img src="../assets/budget.jpg" alt="" class="icon" />  
                             </div>
-                            <span class="card-detail">*** *** ***</span>
+                            <span class="card-detail">Rp 000.000.000</span>
                         </div>
                     </div>
                     
@@ -100,7 +117,7 @@
                                 </div>
                                 <img src="../assets/budget.jpg" alt="" class="icon" />
                             </div>
-                            <span class="card-detail">*** *** ***</span>
+                            <span class="card-detail">Rp 000.000.000</span>
                         </div>
 
                         <div class="data--card light-cream">
@@ -114,7 +131,7 @@
                                 </div>
                                 <img src="../assets/budget.jpg" alt="" class="icon" />
                             </div>
-                            <span class="card detail">*** *** ***</span>
+                            <span class="card detail">Rp 000.000.000</span>
                         </div>
                     </div>
 
@@ -131,9 +148,13 @@
                                 </div>
                                 <img src="../assets/budget.jpg" alt="" class="icon" />  
                             </div>
-                            <span class="card-detail">*** *** ***</span>
+                            <span class="card-detail">Rp 000.000.000</span>
                         </div>
+                        
                 </div>
             </div>
-        </body>
+            <?php
+            $conn->close();
+            ?>
+</body>
 </html>

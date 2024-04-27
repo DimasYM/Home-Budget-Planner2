@@ -72,37 +72,70 @@
                 <table>
                     <thead>
                         <tr>
-                        <form action="">
                             <th>ID</th>
-                            <th>Month<button type="submit" name="sort" value="bulan_budget"><i class="bi bi-sort-alpha-up"></i></button> </th>
-                            <th>Daily Budget<button type="submit" name="sort" value="dayb"><i class="bi bi-sort-alpha-up"></i></button> </th>
-                            <th>Monthly Budget<button type="submit" name="sort" value="monthb"><i class="bi bi-sort-alpha-up"></i></button> </th>
+                            <th>Date</th>
+                            <th>Daily Budget</th>
+                            <th>Monthly Budget</th>
                             <th></th>
-                            <input type="hidden" name="order">
-                        </form>
                         </tr>
                     </thead>
                     <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>January</th>
-                                <td>Rp200.000</td>
-                                <td>Rp1.000.000</td>
-                                <td><a href="" style="color: blue;">Edit</a> | <a href="" style="color: red;">Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>February</td>
-                                <td>Rp250.000</td>
-                                <td>Rp1.500.000</td>
-                                <td><a href="" style="color: blue; ">Edit</a> | <a href="" style="color: red;">Delete</a></td>
-                            </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                        <?php 
+
+include "../config.php";
+
+$sql = "SELECT * FROM budgetlist";
+$result = mysqli_query($conn, $sql);
+
+// Mengecek apakah ada data yang ditemukan
+if (mysqli_num_rows($result) > 0) {
+    // Menampilkan data ke dalam tabel
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<tr>";
+        echo "<td>" . $row['id'] . "</td>";
+        echo "<td>" . $row['tanggal'] . "</td>";
+        echo "<td>" . $row['daybudget'] . "</td>";
+        echo "<td>" . $row['monthbudget'] . "</td>";
+        echo "<td>
+        <form method='post'>
+        <input type='hidden' name='delete_id' value='" . $row['id'] . "'>
+            <button class='button-no-border' style='color: red;' type='submit' name='delete'>Hapus</button> |
+            </form>
+        <form method='post' action='edit_budget.php'>
+            <input type='hidden' name='edit_id' value='" . $row['id'] . "'>
+            <button class='button-no-border' style='color:blue;' type='submit' name='edit'>Edit</button>
+        </form>
+        </td>";
+
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='6'>Tidak ada data</td></tr>";
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Memeriksa apakah tombol delete ditekan
+    if (isset($_POST["delete"])) {
+        // Mengambil ID yang akan dihapus dari permintaan
+        $id_to_delete = $_POST["delete_id"];
+        
+        // Query untuk menghapus data berdasarkan ID
+        $sql_delete = "DELETE FROM budgetlist WHERE id = $id_to_delete";
+
+        // Menjalankan query
+        if (mysqli_query($conn, $sql_delete)) {
+            header("Location: " . $_SERVER["PHP_SELF"]);
+        } else {
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+$conn->close();
+?>
+            </tbody>
+        </table>
     </div>
-
-
+</div>
     </body>
 </html>

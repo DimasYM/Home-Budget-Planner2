@@ -29,6 +29,14 @@ body {
   transition: 0.5s;
 }
 
+.button-no-border {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: red;
+}
+
+
 .logo {
   height: 80px;
   padding: 16px;
@@ -261,6 +269,7 @@ thead {
 th {
   padding: 15px;
   text-align: left;
+  
 }
 tbody {
   background: #f2f2f2;

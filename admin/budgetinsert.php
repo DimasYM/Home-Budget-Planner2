@@ -47,33 +47,54 @@
         </div>
 
     <div class="main--content">
-            
-            <form action="">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 
                 <!-- Elemen formulir untuk Nama Pasien -->
                 <div class="mb-3">
-                    <label for="bulan_bbudget" class="form-label">Month</label>
-                    <input type="text" class="form-control" id="bulan_budget" name="bulan_budget" required>
+                    <label for="tanggal">Date</label>
+                    <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+
                 </div>
     
                 <!-- Elemen formulir untuk alamat -->
                 <div class="mb-3">
-                    <label for="dayb" class="form-label">Daily Budget</label>
-                    <input type="text" class="form-control" id="dayb" name="dayb" required>
+                    <label for="daybudget" class="form-label">Daily Budget</label>
+                    <input type="text" class="form-control" id="daybudget" name="daybudget" required>
                 </div>
     
                 <!-- Elemen formulir untuk telepon -->
                 <div class="mb-3">
-                    <label for="monthb" class="form-label">Monthly Budget</label>
-                    <input type="text" class="form-control" id="monthb" name="monthb" required>
+                    <label for="monthbudget" class="form-label">Monthly Budget</label>
+                    <input type="text" class="form-control" id="monthbudget" name="monthbudget" required>
                 </div>
 
                 <!-- Tombol Submit -->
                 <div class="d-grid gap-2">
-                    <button class="btn btn-secondary" type="submit" name="submit">Insert</button>
+                    <button class="btn btn-secondary" type="submit" value="Submit">Insert</button>
                 </div>
             </form>
         </div>
+        
+    <?php
     
+    include "../config.php";
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $tanggal = $_POST["tanggal"];
+            $daybudget = $_POST["daybudget"];
+            $monthbudget = $_POST["monthbudget"];
+
+        // Menambahkan data ke dalam database
+        $sql = "INSERT INTO budgetlist (tanggal, daybudget, monthbudget) VALUES ('$tanggal', '$daybudget', '$monthbudget')";
+
+        if ($conn->query($sql) === TRUE) {
+            header("Location: budgetlist.php");
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+
+        $conn->close();
+    }
+    ?>
 </body>
 </html>

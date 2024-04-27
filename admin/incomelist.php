@@ -72,33 +72,74 @@
                 <table>
                     <thead>
                         <tr>
-                        <form action="">
                             <th>ID</th>
-                            <th>Month<button type="submit" name="sort" value="bulan_income"><i class="bi bi-sort-alpha-up"></i></button> </th>
-                            <th>Income<button type="submit" name="sort" value="incomet"><i class="bi bi-sort-alpha-up"></i></button></th>
-                            <th>Expenses<button type="submit" name="sort" value="expenses"><i class="bi bi-sort-alpha-up"></i></button></th>
+                            <th>Month<button</th>
+                            <th>Income<button</button></th>
+                            <th>Expenses<button</i></button></th>
                             <th></th>
-                            <input type="hidden" name="order">
-                        </form>
                         </tr>
                     </thead>
                     <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>November</td>
-                                <td>Rp3.000.000</td>
-                                <td>Rp1.000.000</td>
-                                <td><a href="" style="color: blue;">Edit</a> | <a href="" style="color: red;">Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>December</td>
-                                <td>Rp.5.000.000</td>
-                                <td>Rp1.500.000</td>
-                                <td><a href="" style="color: blue;">Edit</a> | <a href="" style="color: red;">Delete</a></td>
-                            </tr>
-                    </tbody>
-                </table>
+    <?php 
+
+    include "../config.php";
+// Memeriksa koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+$sql = "SELECT * FROM incomelist";
+$result = mysqli_query($conn, $sql);
+
+// Mengecek apakah ada data yang ditemukan
+if (mysqli_num_rows($result) > 0) {
+    // Menampilkan data ke dalam tabel
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<tr>";
+        echo "<td>" . $row['id'] . "</td>";
+        echo "<td>" . $row['tanggal'] . "</td>";
+        echo "<td>" . $row['income'] . "</td>";
+        echo "<td>" . $row['expenses'] . "</td>";
+        echo "<td>
+        <form method='post'>
+            <input type='hidden' name='delete_id' value='" . $row['id'] . "'>
+            <button class='button-no-border' style='color: red;' type='submit' name='delete'>Hapus</button> |
+        </form>
+        <form method='post' action='edit_income.php'>
+            <input type='hidden' name='edit_id' value='" . $row['id'] . "'>
+            <button class='button-no-border' style='color:blue;' type='submit' name='edit'>Edit</button>
+        </form>
+        </td>";
+
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='6'>Tidak ada data</td></tr>";
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Memeriksa apakah tombol delete ditekan
+    if (isset($_POST["delete"])) {
+        // Mengambil ID yang akan dihapus dari permintaan
+        $id_to_delete = $_POST["delete_id"];
+        
+        // Query untuk menghapus data berdasarkan ID
+        $sql_delete = "DELETE FROM incomelist WHERE id = $id_to_delete";
+
+        // Menjalankan query
+        if (mysqli_query($conn, $sql_delete)) {
+            header("Location: " . $_SERVER["PHP_SELF"]);
+            exit();
+        } else {
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+$conn->close();
+?>
+            </tbody>
+        </table>
             </div>
         </div>
     </div>
